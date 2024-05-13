@@ -1,6 +1,6 @@
-# ice_card
+# calorie_app
 
-ICE Card App
+Calorie App
 
 ## Getting Started
 
