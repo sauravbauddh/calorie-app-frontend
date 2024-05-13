@@ -1,0 +1,1375 @@
+Index: lib/app/modules/profile/widget/info_type.dart
+===================================================================
+diff --git a/lib/app/modules/profile/widget/info_type.dart b/lib/app/modules/profile/widget/info_type.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/widget/info_type.dart	
++++ /dev/null	
+@@ -1,99 +0,0 @@
+-import 'package:flutter/material.dart';
+-import 'package:get/get.dart';
+-import 'package:ice_card/app/modules/profile/controllers/profile_controller.dart';
+-import 'package:ice_card/app/theme/app_color.dart';
+-import 'package:ice_card/widgets/profile_widgets.dart';
+-
+-class InfoType extends GetView<ProfileController> {
+-  const InfoType({super.key});
+-
+-  @override
+-  Widget build(BuildContext context) {
+-    return SingleChildScrollView(
+-      scrollDirection: Axis.horizontal,
+-      child: Padding(
+-        padding: const EdgeInsets.all(8.0),
+-        child: Row(
+-          children: controller.buttonDataList
+-              .asMap()
+-              .map(
+-                (index, buttonData) => MapEntry(
+-              index,
+-              GestureDetector(
+-                onTap: () {
+-                  controller.navIndex.value = index;
+-                  print('Button tapped: ${buttonData.label}');
+-                  controller.onInfoButtonTap();
+-                },
+-                child: Padding(
+-                  padding: EdgeInsets.only(left: index == 0 ? 0 : 10),
+-                  child: Obx(
+-                        () => controller.navIndex.value == index
+-                        ? Card(
+-                      elevation: 3,
+-                      color: AppColors.white,
+-                      shape: RoundedRectangleBorder(
+-                        borderRadius: BorderRadius.circular(10),
+-                      ),
+-                      child: Padding(
+-                        padding: const EdgeInsets.all(8.0),
+-                        child: Column(
+-                          mainAxisAlignment: MainAxisAlignment.center,
+-                          children: [
+-                            Image.asset(
+-                              buttonData.imagePath,
+-                              width: 60, // Adjust according to your needs
+-                              height: 60, // Adjust according to your needs
+-                            ),
+-                            const SizedBox(height: 8), // Adjust spacing between image and label
+-                            Text(
+-                              buttonData.label,
+-                              style: const TextStyle(
+-                                fontSize: 16, // Adjust according to your needs
+-                                fontWeight: FontWeight.bold,
+-                              ),
+-                            ),
+-                          ],
+-                        ),
+-                      ),
+-                    )
+-                        : Padding(
+-                      padding: const EdgeInsets.all(8.0),
+-                      child: Column(
+-                        mainAxisAlignment: MainAxisAlignment.center,
+-                        children: [
+-                          Image.asset(
+-                            buttonData.imagePath,
+-                            width: 60,
+-                            height: 60,
+-                          ),
+-                          const SizedBox(height: 8), // Adjust spacing between image and label
+-                          Text(
+-                            buttonData.label,
+-                            style: const TextStyle(
+-                              fontSize: 16, // Adjust according to your needs
+-                              fontWeight: FontWeight.bold,
+-                            ),
+-                          ),
+-                        ],
+-                      ),
+-                    ),
+-                  ),
+-                ),
+-              ),
+-            ),
+-          )
+-              .values
+-              .toList(),
+-        ),
+-      ),
+-    );
+-  }
+-}
+-
+-class ButtonData {
+-  final String imagePath;
+-  final String label;
+-  final String subTitle;
+-  ButtonData({required this.imagePath, required this.label, required this.subTitle});
+-}
+Index: lib/app/modules/profile/widget/family_info.dart
+===================================================================
+diff --git a/lib/app/modules/profile/widget/family_info.dart b/lib/app/modules/profile/widget/family_info.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/widget/family_info.dart	
++++ /dev/null	
+@@ -1,69 +0,0 @@
+-import 'package:flutter/material.dart';
+-import 'package:get/get.dart';
+-import 'package:ice_card/app/data/value/dimens.dart';
+-import 'package:ice_card/app/modules/profile/controllers/family_info_controller.dart';
+-import 'package:ice_card/app/theme/app_color.dart';
+-import 'package:ice_card/widgets/profile_widgets.dart';
+-import '../../../data/value/images.dart';
+-
+-class FamilyInfo extends GetView<FamilyInfoController> {
+-  const FamilyInfo({super.key});
+-
+-  @override
+-  Widget build(BuildContext context) {
+-    return Padding(
+-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+-      child: Column(
+-        children: [
+-          Dimens.heightGap20,
+-          const SingleChildScrollView(
+-            scrollDirection: Axis.horizontal,
+-            child: Row(
+-              mainAxisAlignment: MainAxisAlignment.start,
+-              children: [
+-                IconButtonWithLabel(label: "Elouise", imagePath: AppImages.malePerson,),
+-                Dimens.widthGap10,
+-                IconButtonWithLabel(label: "Vicente", imagePath: AppImages.femalePerson,),
+-                Dimens.widthGap10,
+-              ],
+-            ),
+-          ),
+-          Padding(
+-            padding: const EdgeInsets.all(8.0),
+-            child: Align(
+-              alignment: Alignment.centerRight,
+-              child: Obx(
+-                    () => GestureDetector(
+-                  onTap: controller.toggleEditing,
+-                  child: Text(
+-                    controller.isEditing.value ? "View" : "Edit",
+-                    style: TextStyle(
+-                      fontSize: 16,
+-                      fontWeight: FontWeight.bold,
+-                    ),
+-                  ),
+-                ),
+-              ),
+-            ),
+-          ),
+-          Container(
+-            width: double.infinity,
+-            height: Get.height * .49,
+-            decoration: BoxDecoration(
+-              color: AppColors.white,
+-              borderRadius: BorderRadius.circular(16.0),
+-              boxShadow: [
+-                BoxShadow(
+-                  color: Colors.grey.withOpacity(0.5),
+-                  spreadRadius: 3,
+-                  blurRadius: 7,
+-                  offset: const Offset(0, 3), // changes position of shadow
+-                ),
+-              ],
+-            ),
+-            child: DetailsCard(details: controller.familyMemberInfoList, controller: controller,),),
+-        ],
+-      ),
+-    );
+-  }
+-}
+Index: lib/app/modules/profile/widget/health_info.dart
+===================================================================
+diff --git a/lib/app/modules/profile/widget/health_info.dart b/lib/app/modules/profile/widget/health_info.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/widget/health_info.dart	
++++ /dev/null	
+@@ -1,56 +0,0 @@
+-import 'package:flutter/material.dart';
+-import 'package:get/get.dart';
+-import 'package:ice_card/app/data/value/dimens.dart';
+-import 'package:ice_card/app/modules/profile/controllers/health_info_controller.dart';
+-import 'package:ice_card/app/theme/app_color.dart';
+-import 'package:ice_card/widgets/profile_widgets.dart';
+-
+-
+-class HealthInfo extends GetView<HealthInfoController> {
+-  const HealthInfo({super.key});
+-  @override
+-  Widget build(BuildContext context) {
+-    return Padding(
+-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+-      child: Column(
+-        children: [
+-          Padding(
+-            padding: const EdgeInsets.all(8.0),
+-            child: Align(
+-              alignment: Alignment.centerRight,
+-              child: Obx(
+-                    () => GestureDetector(
+-                  onTap: controller.toggleEditing,
+-                  child: Text(
+-                    controller.isEditing.value ? "View" : "Edit",
+-                    style: TextStyle(
+-                      fontSize: 16,
+-                      fontWeight: FontWeight.bold,
+-                    ),
+-                  ),
+-                ),
+-              ),
+-            ),
+-          ),
+-          Container(
+-            height: Get.height * .59,
+-            width: double.infinity,
+-            decoration: BoxDecoration(
+-              color: AppColors.white,
+-              borderRadius: BorderRadius.circular(16.0),
+-              boxShadow: [
+-                BoxShadow(
+-                  color: Colors.grey.withOpacity(0.5),
+-                  spreadRadius: 3,
+-                  blurRadius: 7,
+-                  offset: const Offset(0, 3), // changes position of shadow
+-                ),
+-              ],
+-            ),
+-            child: DetailsCard(details: controller.healthInfoList, controller: controller,),),
+-        ],
+-      ),
+-    );
+-  }
+-}
+-
+Index: lib/app/modules/profile/widget/others_info.dart
+===================================================================
+diff --git a/lib/app/modules/profile/widget/others_info.dart b/lib/app/modules/profile/widget/others_info.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/widget/others_info.dart	
++++ /dev/null	
+@@ -1,66 +0,0 @@
+-import 'package:flutter/material.dart';
+-import 'package:get/get.dart';
+-import 'package:ice_card/app/data/value/dimens.dart';
+-import 'package:ice_card/app/data/value/images.dart';
+-import 'package:ice_card/app/modules/profile/controllers/others_info_controller.dart';
+-import 'package:ice_card/app/theme/app_color.dart';
+-import 'package:ice_card/widgets/profile_widgets.dart';
+-
+-class OthersInfo extends GetView<OthersInfoController> {
+-  const OthersInfo({super.key});
+-
+-  @override
+-  Widget build(BuildContext context) {
+-    return Padding(
+-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+-      child: Column(
+-        children: [
+-          const SingleChildScrollView(
+-            scrollDirection: Axis.horizontal,
+-            child: Row(
+-              mainAxisAlignment: MainAxisAlignment.start,
+-              children: [
+-                IconButtonWithLabel(label: "", imagePath: AppImages.generalInfo),
+-                Dimens.widthGap10,
+-              ],
+-            ),
+-          ),
+-          Padding(
+-            padding: const EdgeInsets.all(8.0),
+-            child: Align(
+-              alignment: Alignment.centerRight,
+-              child: Obx(
+-                    () => GestureDetector(
+-                  onTap: controller.toggleEditing,
+-                  child: Text(
+-                    controller.isEditing.value ? "View" : "Edit",
+-                    style: TextStyle(
+-                      fontSize: 16,
+-                      fontWeight: FontWeight.bold,
+-                    ),
+-                  ),
+-                ),
+-              ),
+-            ),
+-          ),
+-          Container(
+-            width: double.infinity,
+-            height: Get.height * .49,
+-            decoration: BoxDecoration(
+-              color: AppColors.white,
+-              borderRadius: BorderRadius.circular(16.0),
+-              boxShadow: [
+-                BoxShadow(
+-                  color: Colors.grey.withOpacity(0.5),
+-                  spreadRadius: 3,
+-                  blurRadius: 7,
+-                  offset: const Offset(0, 3), // changes position of shadow
+-                ),
+-              ],
+-            ),
+-            child: DetailsCard(details: controller.othersInfoList, controller: controller,),),
+-        ],
+-      ),
+-    );
+-  }
+-}
+\ No newline at end of file
+Index: lib/app/modules/profile/widget/general_info.dart
+===================================================================
+diff --git a/lib/app/modules/profile/widget/general_info.dart b/lib/app/modules/profile/widget/general_info.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/widget/general_info.dart	
++++ /dev/null	
+@@ -1,62 +0,0 @@
+-import 'package:flutter/cupertino.dart';
+-import 'package:flutter/material.dart';
+-import 'package:get/get.dart';
+-import 'package:ice_card/app/modules/profile/controllers/general_info_controller.dart';
+-import 'package:ice_card/app/theme/app_color.dart';
+-import 'package:ice_card/widgets/profile_widgets.dart';
+-
+-class GeneralInfo extends GetView<GeneralInfoController> {
+-  const GeneralInfo({super.key});
+-
+-  @override
+-  Widget build(BuildContext context) {
+-    return Center(
+-      child: Padding(
+-        padding: const EdgeInsets.all(16.0),
+-        child: Column(
+-          crossAxisAlignment: CrossAxisAlignment.center,
+-          children: [
+-            const CircleAvatar(
+-              child: Icon(Icons.person, size: 80),
+-              radius: 60,
+-            ),
+-            Padding(
+-              padding: const EdgeInsets.all(8.0),
+-              child: Align(
+-                alignment: Alignment.centerRight,
+-                child: Obx(
+-                      () => GestureDetector(
+-                    onTap: controller.toggleEditing,
+-                    child: Text(
+-                      controller.isEditing.value ? "View" : "Edit",
+-                      style: TextStyle(
+-                        fontSize: 16,
+-                        fontWeight: FontWeight.bold,
+-                      ),
+-                    ),
+-                  ),
+-                ),
+-              ),
+-            ),
+-            Container(
+-              width: double.infinity,
+-              height: Get.height * .45,
+-              decoration: BoxDecoration(
+-                color: AppColors.white,
+-                borderRadius: BorderRadius.circular(16.0),
+-                boxShadow: [
+-                  BoxShadow(
+-                    color: Colors.grey.withOpacity(0.5),
+-                    spreadRadius: 3,
+-                    blurRadius: 7,
+-                    offset: Offset(0, 3), // changes position of shadow
+-                  ),
+-                ],
+-              ),
+-              child: DetailsCard(details: controller.generalDetailItemList, controller: controller,),),
+-          ],
+-        ),
+-      ),
+-    );
+-  }
+-}
+\ No newline at end of file
+Index: lib/app/modules/profile/widget/vehicle_info.dart
+===================================================================
+diff --git a/lib/app/modules/profile/widget/vehicle_info.dart b/lib/app/modules/profile/widget/vehicle_info.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/widget/vehicle_info.dart	
++++ /dev/null	
+@@ -1,67 +0,0 @@
+-import 'package:flutter/material.dart';
+-import 'package:get/get.dart';
+-import 'package:ice_card/app/data/value/dimens.dart';
+-import 'package:ice_card/app/data/value/images.dart';
+-import 'package:ice_card/app/modules/profile/controllers/vehicle_info_controller.dart';
+-import 'package:ice_card/app/theme/app_color.dart';
+-import 'package:ice_card/widgets/profile_widgets.dart';
+-
+-class VehicleInfo extends GetView<VehicleInfoController> {
+-  const VehicleInfo({super.key});
+-
+-  @override
+-  Widget build(BuildContext context) {
+-    return Padding(
+-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+-      child: Column(
+-        children: [
+-          Dimens.heightGap20,
+-          const SingleChildScrollView(
+-            scrollDirection: Axis.horizontal,
+-            child: Row(
+-              mainAxisAlignment: MainAxisAlignment.start,
+-              children: [
+-                IconButtonWithLabel(label: "4 wheeler", imagePath: AppImages.carImage,),
+-                Dimens.widthGap10,
+-              ],
+-            ),
+-          ),
+-          Padding(
+-            padding: const EdgeInsets.all(8.0),
+-            child: Align(
+-              alignment: Alignment.centerRight,
+-              child: Obx(
+-                    () => GestureDetector(
+-                  onTap: controller.toggleEditing,
+-                  child: Text(
+-                    controller.isEditing.value ? "View" : "Edit",
+-                    style: const TextStyle(
+-                      fontSize: 16,
+-                      fontWeight: FontWeight.bold,
+-                    ),
+-                  ),
+-                ),
+-              ),
+-            ),
+-          ),
+-          Container(
+-            width: double.infinity,
+-            height: Get.height * .49,
+-            decoration: BoxDecoration(
+-              color: AppColors.white,
+-              borderRadius: BorderRadius.circular(16.0),
+-              boxShadow: [
+-                BoxShadow(
+-                  color: Colors.grey.withOpacity(0.5),
+-                  spreadRadius: 3,
+-                  blurRadius: 7,
+-                  offset: const Offset(0, 3), // changes position of shadow
+-                ),
+-              ],
+-            ),
+-            child: DetailsCard(details: controller.vehicleInfoList, controller: controller,),),
+-        ],
+-      ),
+-    );
+-  }
+-}
+\ No newline at end of file
+Index: lib/app/modules/profile/widget/services_info.dart
+===================================================================
+diff --git a/lib/app/modules/profile/widget/services_info.dart b/lib/app/modules/profile/widget/services_info.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/widget/services_info.dart	
++++ /dev/null	
+@@ -1,67 +0,0 @@
+-import 'package:flutter/material.dart';
+-import 'package:get/get.dart';
+-import 'package:ice_card/app/data/value/dimens.dart';
+-import 'package:ice_card/app/data/value/images.dart';
+-import 'package:ice_card/app/modules/profile/controllers/service_info_controller.dart';
+-import 'package:ice_card/app/theme/app_color.dart';
+-import 'package:ice_card/widgets/profile_widgets.dart';
+-
+-class ServicesInfo extends GetView<ServiceInfoController> {
+-  const ServicesInfo({super.key});
+-
+-  @override
+-  Widget build(BuildContext context) {
+-    return Padding(
+-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+-      child: Column(
+-        children: [
+-          Dimens.heightGap20,
+-          const SingleChildScrollView(
+-            scrollDirection: Axis.horizontal,
+-            child: Row(
+-              mainAxisAlignment: MainAxisAlignment.start,
+-              children: [
+-                IconButtonWithLabel(label: "Hospital", imagePath: AppImages.hospitalIcon,),
+-                Dimens.widthGap10,
+-              ],
+-            ),
+-          ),
+-          Padding(
+-            padding: const EdgeInsets.all(8.0),
+-            child: Align(
+-              alignment: Alignment.centerRight,
+-              child: Obx(
+-                    () => GestureDetector(
+-                  onTap: controller.toggleEditing,
+-                  child: Text(
+-                    controller.isEditing.value ? "View" : "Edit",
+-                    style: TextStyle(
+-                      fontSize: 16,
+-                      fontWeight: FontWeight.bold,
+-                    ),
+-                  ),
+-                ),
+-              ),
+-            ),
+-          ),
+-          Container(
+-            width: double.infinity,
+-            height: Get.height * .49,
+-            decoration: BoxDecoration(
+-              color: AppColors.white,
+-              borderRadius: BorderRadius.circular(16.0),
+-              boxShadow: [
+-                BoxShadow(
+-                  color: Colors.grey.withOpacity(0.5),
+-                  spreadRadius: 3,
+-                  blurRadius: 7,
+-                  offset: const Offset(0, 3), // changes position of shadow
+-                ),
+-              ],
+-            ),
+-            child: DetailsCard(details: controller.emergencyServicesInfoList, controller: controller,),),
+-        ],
+-      ),
+-    );
+-  }
+-}
+\ No newline at end of file
+Index: lib/app/modules/profile/widget/insurance_info.dart
+===================================================================
+diff --git a/lib/app/modules/profile/widget/insurance_info.dart b/lib/app/modules/profile/widget/insurance_info.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/widget/insurance_info.dart	
++++ /dev/null	
+@@ -1,67 +0,0 @@
+-import 'package:flutter/material.dart';
+-import 'package:get/get.dart';
+-import 'package:ice_card/app/data/value/dimens.dart';
+-import 'package:ice_card/app/data/value/images.dart';
+-import 'package:ice_card/app/modules/profile/controllers/insurance_info_controller.dart';
+-import 'package:ice_card/app/theme/app_color.dart';
+-import 'package:ice_card/widgets/profile_widgets.dart';
+-
+-class InsuranceInfo extends GetView<InsuranceInfoController> {
+-  const InsuranceInfo({super.key});
+-
+-  @override
+-  Widget build(BuildContext context) {
+-    return Padding(
+-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+-      child: Column(
+-        children: [
+-          Dimens.heightGap20,
+-          const SingleChildScrollView(
+-            scrollDirection: Axis.horizontal,
+-            child: Row(
+-              mainAxisAlignment: MainAxisAlignment.start,
+-              children: [
+-                IconButtonWithLabel(label: "Insurance", imagePath: AppImages.insuranceIcon,),
+-              ],
+-            ),
+-          ),
+-          Padding(
+-            padding: const EdgeInsets.all(8.0),
+-            child: Align(
+-              alignment: Alignment.centerRight,
+-              child: Obx(
+-                    () => GestureDetector(
+-                  onTap: controller.toggleEditing,
+-                  child: Text(
+-                    controller.isEditing.value ? "View" : "Edit",
+-                    style: TextStyle(
+-                      fontSize: 16,
+-                      fontWeight: FontWeight.bold,
+-                    ),
+-                  ),
+-                ),
+-              ),
+-            ),
+-          ),
+-          Container(
+-            width: double.infinity,
+-            height: Get.height * .49,
+-            decoration: BoxDecoration(
+-              color: AppColors.white,
+-              borderRadius: BorderRadius.circular(16.0),
+-              boxShadow: [
+-                BoxShadow(
+-                  color: Colors.grey.withOpacity(0.5),
+-                  spreadRadius: 3,
+-                  blurRadius: 7,
+-                  offset: const Offset(0, 3), // changes position of shadow
+-                ),
+-              ],
+-            ),
+-            child: DetailsCard(details: controller.insuranceInfoList, controller: controller,),),
+-        ],
+-      ),
+-    );
+-  }
+-}
+-
+Index: lib/app/modules/profile/widget/family_doctor_info.dart
+===================================================================
+diff --git a/lib/app/modules/profile/widget/family_doctor_info.dart b/lib/app/modules/profile/widget/family_doctor_info.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/widget/family_doctor_info.dart	
++++ /dev/null	
+@@ -1,67 +0,0 @@
+-import 'package:flutter/material.dart';
+-import 'package:get/get.dart';
+-import 'package:ice_card/app/data/value/dimens.dart';
+-import 'package:ice_card/app/data/value/images.dart';
+-import 'package:ice_card/app/modules/profile/controllers/family_doctor_info_controller.dart';
+-import 'package:ice_card/app/theme/app_color.dart';
+-import 'package:ice_card/widgets/profile_widgets.dart';
+-
+-class FamilyDoctorInfo extends GetView<FamilyDocInfoController> {
+-  const FamilyDoctorInfo({super.key});
+-
+-  @override
+-  Widget build(BuildContext context) {
+-    return Padding(
+-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+-      child: Column(
+-        children: [
+-          Dimens.heightGap20,
+-          const SingleChildScrollView(
+-            scrollDirection: Axis.horizontal,
+-            child: Row(
+-              mainAxisAlignment: MainAxisAlignment.start,
+-              children: [
+-                IconButtonWithLabel(label: "Pearl Heller", imagePath: AppImages.femaleDoctorIcon,),
+-              ],
+-            ),
+-          ),
+-          Padding(
+-            padding: const EdgeInsets.all(8.0),
+-            child: Align(
+-              alignment: Alignment.centerRight,
+-              child: Obx(
+-                    () => GestureDetector(
+-                  onTap: controller.toggleEditing,
+-                  child: Text(
+-                    controller.isEditing.value ? "View" : "Edit",
+-                    style: TextStyle(
+-                      fontSize: 16,
+-                      fontWeight: FontWeight.bold,
+-                    ),
+-                  ),
+-                ),
+-              ),
+-            ),
+-          ),
+-          Container(
+-            width: double.infinity,
+-            height: Get.height * .49,
+-            decoration: BoxDecoration(
+-              color: AppColors.white,
+-              borderRadius: BorderRadius.circular(16.0),
+-              boxShadow: [
+-                BoxShadow(
+-                  color: Colors.grey.withOpacity(0.5),
+-                  spreadRadius: 3,
+-                  blurRadius: 7,
+-                  offset: const Offset(0, 3), // changes position of shadow
+-                ),
+-              ],
+-            ),
+-            child: DetailsCard(details: controller.familyDoctorInfoList, controller: controller,),
+-          ),
+-        ],
+-      ),
+-    );
+-  }
+-}
+Index: lib/app/modules/profile/widget/legacy_contact_info.dart
+===================================================================
+diff --git a/lib/app/modules/profile/widget/legacy_contact_info.dart b/lib/app/modules/profile/widget/legacy_contact_info.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/widget/legacy_contact_info.dart	
++++ /dev/null	
+@@ -1,55 +0,0 @@
+-import 'package:flutter/material.dart';
+-import 'package:get/get.dart';
+-import 'package:ice_card/app/data/value/dimens.dart';
+-import 'package:ice_card/app/modules/profile/controllers/legacy_info_controller.dart';
+-import 'package:ice_card/app/theme/app_color.dart';
+-import 'package:ice_card/widgets/profile_widgets.dart';
+-
+-class LegacyContactInfo extends GetView<LegacyInfoController> {
+-  const LegacyContactInfo({super.key});
+-
+-  @override
+-  Widget build(BuildContext context) {
+-    return Padding(
+-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+-      child: Column(
+-        children: [
+-          Padding(
+-            padding: const EdgeInsets.all(8.0),
+-            child: Align(
+-              alignment: Alignment.centerRight,
+-              child: Obx(
+-                    () => GestureDetector(
+-                  onTap: controller.toggleEditing,
+-                  child: Text(
+-                    controller.isEditing.value ? "View" : "Edit",
+-                    style: TextStyle(
+-                      fontSize: 16,
+-                      fontWeight: FontWeight.bold,
+-                    ),
+-                  ),
+-                ),
+-              ),
+-            ),
+-          ),
+-          Container(
+-            width: double.infinity,
+-            decoration: BoxDecoration(
+-              color: AppColors.white,
+-              borderRadius: BorderRadius.circular(16.0),
+-              boxShadow: [
+-                BoxShadow(
+-                  color: Colors.grey.withOpacity(0.5),
+-                  spreadRadius: 3,
+-                  blurRadius: 7,
+-                  offset: const Offset(0, 3), // changes position of shadow
+-                ),
+-              ],
+-            ),
+-            child: DetailsCardWithCheckbox(details: controller.legacyContactList),
+-          ),
+-        ],
+-      ),
+-    );
+-  }
+-}
+\ No newline at end of file
+Index: lib/app/modules/profile/controllers/controller_interface.dart
+===================================================================
+diff --git a/lib/app/modules/profile/controllers/controller_interface.dart b/lib/app/modules/profile/controllers/controller_interface.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/controllers/controller_interface.dart	
++++ /dev/null	
+@@ -1,5 +0,0 @@
+-import 'package:get/get.dart';
+-abstract class DetailsControllerInterface {
+-  RxBool get isEditing;
+-  void toggleEditing();
+-}
+\ No newline at end of file
+Index: lib/app/modules/profile/controllers/family_info_controller.dart
+===================================================================
+diff --git a/lib/app/modules/profile/controllers/family_info_controller.dart b/lib/app/modules/profile/controllers/family_info_controller.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/controllers/family_info_controller.dart	
++++ /dev/null	
+@@ -1,38 +0,0 @@
+-import 'package:get/get.dart';
+-import 'package:ice_card/app/modules/profile/controllers/controller_interface.dart';
+-import 'package:ice_card/base/base_controller.dart';
+-import 'package:ice_card/widgets/profile_widgets.dart';
+-
+-class FamilyInfoController extends BaseController implements DetailsControllerInterface {
+-
+-  List<DetailItem> familyMemberInfoList = [
+-    DetailItem(
+-      label: 'Name',
+-      values: ['Elouise'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'Gender',
+-      values: ['Male'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'Phone Number',
+-      values: ['9123091234'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'You Relationship',
+-      values: ['Brother'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'His/Her Blood Group',
+-      values: ['O+'], icon: null,
+-    ),
+-  ];
+-
+-  @override
+-  RxBool isEditing = false.obs;
+-
+-  @override
+-  void toggleEditing() {
+-    isEditing.value = !isEditing.value;
+-  }
+-}
+\ No newline at end of file
+Index: lib/app/modules/profile/controllers/health_info_controller.dart
+===================================================================
+diff --git a/lib/app/modules/profile/controllers/health_info_controller.dart b/lib/app/modules/profile/controllers/health_info_controller.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/controllers/health_info_controller.dart	
++++ /dev/null	
+@@ -1,46 +0,0 @@
+-import 'package:get/get.dart';
+-import 'package:ice_card/app/modules/profile/controllers/controller_interface.dart';
+-import 'package:ice_card/base/base_controller.dart';
+-import 'package:ice_card/widgets/profile_widgets.dart';
+-
+-class HealthInfoController extends BaseController implements DetailsControllerInterface {
+-
+-  List<DetailItem> healthInfoList = [
+-    DetailItem(
+-      label: 'Blood Group',
+-      values: ['O+'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'Height',
+-      values: ['160 cm'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'Weight',
+-      values: ['160 lbs'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'Organ Donor',
+-      values: ['No'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'Medical Condition',
+-      values: ['Diabetic', 'High BP'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'Allergies',
+-      values: ['Extreme Heat', 'Peanuts'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'Remarks',
+-      values: ['Enter any medical condition'], icon: null,
+-    ),
+-  ];
+-
+-  @override
+-  RxBool isEditing = false.obs;
+-
+-  @override
+-  void toggleEditing() {
+-    isEditing.value = !isEditing.value;
+-  }
+-}
+\ No newline at end of file
+Index: lib/app/modules/profile/controllers/legacy_info_controller.dart
+===================================================================
+diff --git a/lib/app/modules/profile/controllers/legacy_info_controller.dart b/lib/app/modules/profile/controllers/legacy_info_controller.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/controllers/legacy_info_controller.dart	
++++ /dev/null	
+@@ -1,34 +0,0 @@
+-import 'package:get/get.dart';
+-import 'package:ice_card/app/modules/profile/controllers/controller_interface.dart';
+-import 'package:ice_card/base/base_controller.dart';
+-import 'package:ice_card/widgets/profile_widgets.dart';
+-
+-class LegacyInfoController extends BaseController implements DetailsControllerInterface {
+-
+-  List<ContactDetail> legacyContactList = [
+-    ContactDetail(
+-      serialNumber: 1,
+-      value: 'John Doe',
+-      isLegacyContact: true,
+-    ),
+-    ContactDetail(
+-      serialNumber: 2,
+-      value: 'Jane Smith',
+-      isLegacyContact: true,
+-    ),
+-    ContactDetail(
+-      serialNumber: 3,
+-      value: 'Michael Johnson',
+-      isLegacyContact: true,
+-    ),
+-  ];
+-
+-  @override
+-  RxBool isEditing = false.obs;
+-
+-  @override
+-  void toggleEditing() {
+-    isEditing.value = !isEditing.value;
+-  }
+-
+-}
+\ No newline at end of file
+Index: lib/app/modules/profile/controllers/others_info_controller.dart
+===================================================================
+diff --git a/lib/app/modules/profile/controllers/others_info_controller.dart b/lib/app/modules/profile/controllers/others_info_controller.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/controllers/others_info_controller.dart	
++++ /dev/null	
+@@ -1,26 +0,0 @@
+-import 'package:get/get.dart';
+-import 'package:ice_card/app/modules/profile/controllers/controller_interface.dart';
+-import 'package:ice_card/base/base_controller.dart';
+-import 'package:ice_card/widgets/profile_widgets.dart';
+-
+-class OthersInfoController extends BaseController implements DetailsControllerInterface {
+-
+-  List<DetailItem> othersInfoList = [
+-    DetailItem(
+-      label: 'Heading',
+-      values: ['..data..'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'Description',
+-      values: ['..data..'], icon: null,
+-    ),
+-  ];
+-
+-  @override
+-  RxBool isEditing = false.obs;
+-
+-  @override
+-  void toggleEditing() {
+-    isEditing.value = !isEditing.value;
+-  }
+-}
+\ No newline at end of file
+Index: lib/app/modules/profile/controllers/general_info_controller.dart
+===================================================================
+diff --git a/lib/app/modules/profile/controllers/general_info_controller.dart b/lib/app/modules/profile/controllers/general_info_controller.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/controllers/general_info_controller.dart	
++++ /dev/null	
+@@ -1,40 +0,0 @@
+-import 'package:flutter/material.dart';
+-import 'package:get/get.dart';
+-import 'package:ice_card/app/modules/profile/controllers/controller_interface.dart';
+-import 'package:ice_card/base/base_controller.dart';
+-import 'package:ice_card/widgets/profile_widgets.dart';
+-
+-class GeneralInfoController extends BaseController implements DetailsControllerInterface {
+-
+-
+-  List<DetailItem> generalDetailItemList = [
+-    DetailItem(
+-      label: 'Full Name',
+-      values: ['Mr. Rajesh Verma'], icon: Icons.person_2_outlined,
+-    ),
+-    DetailItem(
+-      label: 'Gender',
+-      values: ['Male'], icon: Icons.male,
+-    ),
+-    DetailItem(
+-      label: 'Email ID',
+-      values: ['dummydata@gmail.com'], icon: Icons.email_outlined,
+-    ),
+-    DetailItem(
+-      label: 'Phone Number',
+-      values: ['9827201234'], icon: Icons.phone_outlined,
+-    ),
+-    DetailItem(
+-      label: 'DOB',
+-      values: ['03/12/2002'], icon: Icons.date_range,
+-    ),
+-  ];
+-
+-  @override
+-  RxBool isEditing = false.obs;
+-
+-  @override
+-  void toggleEditing() {
+-    isEditing.value = !isEditing.value;
+-  }
+-}
+\ No newline at end of file
+Index: lib/app/modules/profile/controllers/service_info_controller.dart
+===================================================================
+diff --git a/lib/app/modules/profile/controllers/service_info_controller.dart b/lib/app/modules/profile/controllers/service_info_controller.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/controllers/service_info_controller.dart	
++++ /dev/null	
+@@ -1,35 +0,0 @@
+-import 'package:get/get.dart';
+-import 'package:ice_card/app/modules/profile/controllers/controller_interface.dart';
+-import 'package:ice_card/base/base_controller.dart';
+-import 'package:ice_card/widgets/profile_widgets.dart';
+-
+-class ServiceInfoController extends BaseController implements DetailsControllerInterface {
+-
+-  List<DetailItem> emergencyServicesInfoList = [
+-    DetailItem(
+-      label: 'Hospital Name',
+-      values: ['CNBB Hospital'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'Contact Number',
+-      values: ['9234123532'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'Contact Person',
+-      values: ['Collen Lakin'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'Address',
+-      values: ['56, main street, Aliashire'], icon: null,
+-    ),
+-  ];
+-
+-  @override
+-  RxBool isEditing = false.obs;
+-
+-  @override
+-  void toggleEditing() {
+-    isEditing.value = !isEditing.value;
+-  }
+-
+-}
+\ No newline at end of file
+Index: lib/app/modules/profile/controllers/vehicle_info_controller.dart
+===================================================================
+diff --git a/lib/app/modules/profile/controllers/vehicle_info_controller.dart b/lib/app/modules/profile/controllers/vehicle_info_controller.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/controllers/vehicle_info_controller.dart	
++++ /dev/null	
+@@ -1,30 +0,0 @@
+-import 'package:get/get.dart';
+-import 'package:ice_card/app/modules/profile/controllers/controller_interface.dart';
+-import 'package:ice_card/base/base_controller.dart';
+-import 'package:ice_card/widgets/profile_widgets.dart';
+-
+-class VehicleInfoController extends BaseController implements DetailsControllerInterface {
+-
+-  List<DetailItem> vehicleInfoList = [
+-    DetailItem(
+-      label: 'Vehicle Type',
+-      values: ['Car'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'License Number',
+-      values: ['UP32A234567890'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'Vehicle Number',
+-      values: ['UP234R90'], icon: null,
+-    ),
+-  ];
+-
+-  @override
+-  RxBool isEditing = false.obs;
+-
+-  @override
+-  void toggleEditing() {
+-    isEditing.value = !isEditing.value;
+-  }
+-}
+\ No newline at end of file
+Index: lib/app/modules/profile/controllers/insurance_info_controller.dart
+===================================================================
+diff --git a/lib/app/modules/profile/controllers/insurance_info_controller.dart b/lib/app/modules/profile/controllers/insurance_info_controller.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/controllers/insurance_info_controller.dart	
++++ /dev/null	
+@@ -1,34 +0,0 @@
+-import 'package:get/get.dart';
+-import 'package:ice_card/app/modules/profile/controllers/controller_interface.dart';
+-import 'package:ice_card/base/base_controller.dart';
+-import 'package:ice_card/widgets/profile_widgets.dart';
+-
+-class InsuranceInfoController extends BaseController implements DetailsControllerInterface {
+-
+-  List<DetailItem> insuranceInfoList = [
+-    DetailItem(
+-      label: 'Type of Policy',
+-      values: ['Term insurance'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'Company Name',
+-      values: ['Star Health Insurance'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'Insurance ID',
+-      values: ['3456789'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'Expiry Date',
+-      values: ['23/08/28'], icon: null,
+-    ),
+-  ];
+-
+-  @override
+-  RxBool isEditing = false.obs;
+-
+-  @override
+-  void toggleEditing() {
+-    isEditing.value = !isEditing.value;
+-  }
+-}
+\ No newline at end of file
+Index: lib/app/modules/profile/controllers/family_doctor_info_controller.dart
+===================================================================
+diff --git a/lib/app/modules/profile/controllers/family_doctor_info_controller.dart b/lib/app/modules/profile/controllers/family_doctor_info_controller.dart
+deleted file mode 100644
+--- a/lib/app/modules/profile/controllers/family_doctor_info_controller.dart	
++++ /dev/null	
+@@ -1,32 +0,0 @@
+-import 'package:get/get.dart';
+-import 'package:ice_card/base/base_controller.dart';
+-import 'package:ice_card/widgets/profile_widgets.dart';
+-import 'controller_interface.dart';
+-
+-class FamilyDocInfoController extends BaseController implements DetailsControllerInterface {
+-
+-  List<DetailItem> familyDoctorInfoList = [
+-    DetailItem(
+-      label: 'Doctor Name',
+-      values: ['Ms. Pearl Heller'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'Contact Number',
+-      values: ['9876543209'], icon: null,
+-    ),
+-    DetailItem(
+-      label: 'Specialization',
+-      values: ['General Physician'], icon: null,
+-    ),
+-  ];
+-
+-  @override
+-  RxBool isEditing = false.obs;
+-
+-  @override
+-  void toggleEditing() {
+-    isEditing.value = !isEditing.value;
+-  }
+-
+-
+-}
+\ No newline at end of file
+Index: lib/widgets/profile_widgets.dart
+===================================================================
+diff --git a/lib/widgets/profile_widgets.dart b/lib/widgets/profile_widgets.dart
+deleted file mode 100644
+--- a/lib/widgets/profile_widgets.dart	
++++ /dev/null	
+@@ -1,218 +0,0 @@
+-import 'package:flutter/material.dart';
+-import 'package:get/get.dart';
+-import 'package:ice_card/app/modules/profile/controllers/controller_interface.dart';
+-import 'package:ice_card/app/theme/app_color.dart';
+-
+-class DetailItem {
+-  final String label;
+-  final List<String> values;
+-  final IconData? icon;
+-
+-  DetailItem({required this.label, required this.values, required this.icon});
+-}
+-
+-class DetailsCard extends StatelessWidget {
+-  final List<DetailItem> details;
+-  final DetailsControllerInterface controller;
+-
+-  const DetailsCard({
+-    super.key,
+-    required this.details,
+-    required this.controller,
+-  });
+-
+-  @override
+-  Widget build(BuildContext context) {
+-    return SingleChildScrollView(
+-      child: Padding(
+-        padding: const EdgeInsets.all(16.0),
+-        child: Column(
+-          crossAxisAlignment: CrossAxisAlignment.start,
+-          children: [
+-            const SizedBox(height: 8),
+-            ...details.map((detail) {
+-              return _buildDetailRow(detail);
+-            }),
+-          ],
+-        ),
+-      ),
+-    );
+-  }
+-
+-  Widget _buildDetailRow(DetailItem detail) {
+-    return Padding(
+-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+-      child: Column(
+-        crossAxisAlignment: CrossAxisAlignment.start,
+-        children: [
+-          Row(
+-            children: [
+-              if (detail.icon != null) ...[
+-                Icon(detail.icon!, color: AppColors.blueTextColor),
+-                const SizedBox(width: 8),
+-              ],
+-              Text(
+-                detail.label,
+-                style: const TextStyle(
+-                  fontWeight: FontWeight.bold,
+-                  fontSize: 16,
+-                ),
+-              ),
+-              const Spacer(),
+-            ],
+-          ),
+-          const SizedBox(height: 4),
+-          Column(
+-            crossAxisAlignment: CrossAxisAlignment.start,
+-            children: detail.values.map((value) {
+-              return Padding(
+-                padding: const EdgeInsets.symmetric(vertical: 2),
+-                child: Obx(() {
+-                  return controller.isEditing.value
+-                      ? TextField(
+-                    controller: TextEditingController(text: value),
+-                    decoration: const InputDecoration(
+-                      border: OutlineInputBorder(),
+-                      contentPadding: EdgeInsets.symmetric(
+-                        vertical: 4,
+-                        horizontal: 8,
+-                      ),
+-                      fillColor: Colors.grey,
+-                      filled: true,
+-                    ),
+-                    style: const TextStyle(
+-                      fontSize: 16,
+-                    ),
+-                  )
+-                      : Container(
+-                    padding: const EdgeInsets.symmetric(
+-                        vertical: 4, horizontal: 8),
+-                    decoration: BoxDecoration(
+-                      color: Colors.grey[200],
+-                      borderRadius: BorderRadius.circular(8),
+-                    ),
+-                    child: Text(
+-                      value,
+-                      style: const TextStyle(
+-                        fontSize: 16,
+-                      ),
+-                    ),
+-                  );
+-                }),
+-              );
+-            }).toList(),
+-          ),
+-        ],
+-      ),
+-    );
+-  }
+-}
+-
+-class IconButtonWithLabel extends StatelessWidget {
+-  final String imagePath;
+-  final String label;
+-  final Color iconColor;
+-  final Color labelColor;
+-  final double iconSize;
+-  final double labelFontSize;
+-
+-  const IconButtonWithLabel({
+-    super.key,
+-    required this.imagePath,
+-    required this.label,
+-    this.iconColor = Colors.white,
+-    this.labelColor = Colors.black,
+-    this.iconSize = 25,
+-    this.labelFontSize = 14,
+-  });
+-
+-  @override
+-  Widget build(BuildContext context) {
+-    return Padding(
+-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+-      child: Column(
+-        children: [
+-          CircleAvatar(
+-            radius: 30,
+-            child: CircleAvatar(
+-              radius: 28,
+-              backgroundColor: Colors.white,
+-              backgroundImage: AssetImage(
+-                imagePath,
+-              ),
+-            ),
+-          ),
+-          const SizedBox(height: 8),
+-          Text(
+-            label,
+-            style: TextStyle(
+-              fontSize: labelFontSize,
+-              fontWeight: FontWeight.bold,
+-              color: labelColor,
+-            ),
+-          ),
+-        ],
+-      ),
+-    );
+-  }
+-}
+-
+-class DetailsCardWithCheckbox extends StatelessWidget {
+-  final List<ContactDetail> details;
+-
+-  const DetailsCardWithCheckbox({super.key, required this.details});
+-
+-  @override
+-  Widget build(BuildContext context) {
+-    return Padding(
+-      padding: const EdgeInsets.all(16.0),
+-      child: Column(
+-        crossAxisAlignment: CrossAxisAlignment.start,
+-        children: details.map((detail) => _buildDetailRow(detail)).toList(),
+-      ),
+-    );
+-  }
+-
+-  Widget _buildDetailRow(ContactDetail detail) {
+-    return Padding(
+-      padding: const EdgeInsets.symmetric(vertical: 2.0),
+-      child: Row(
+-        crossAxisAlignment: CrossAxisAlignment.start,
+-        children: [
+-          Expanded(
+-            child: Row(
+-              children: [
+-                Text(
+-                  '${detail.serialNumber.toString()}. ${detail.value}',
+-                  style: const TextStyle(
+-                    fontSize: 16,
+-                    fontWeight: FontWeight.w500,
+-                  ),
+-                ),
+-                const Spacer(),
+-                Checkbox(
+-                  value: detail.isLegacyContact,
+-                  onChanged: (bool? newValue) {
+-                    // Implement your logic for handling checkbox changes here
+-                  },
+-                ),
+-              ],
+-            ),
+-          ),
+-        ],
+-      ),
+-    );
+-  }
+-}
+-
+-class ContactDetail {
+-  final int serialNumber;
+-  final String value;
+-  final bool isLegacyContact;
+-
+-  ContactDetail({
+-    required this.serialNumber,
+-    required this.value,
+-    required this.isLegacyContact,
+-  });
+-}
